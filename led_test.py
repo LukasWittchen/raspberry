@@ -3,28 +3,42 @@ import RPi.GPIO as GPIO
 import time
 
 LedPin = 29
+bwmPin = 7
+
 
 def setup():
-	GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
-	GPIO.setup(LedPin, GPIO.OUT)   # Set LedPin's mode is output
-	GPIO.output(LedPin, GPIO.HIGH) # Set LedPin high(+3.3V) to off led
+    GPIO.setmode(GPIO.BOARD)  # Numbers GPIOs by physical location
+    GPIO.setup(LedPin, GPIO.OUT)
+    GPIO.output(LedPin, GPIO.HIGH)
+    GPIO.setup(bwmPin, GPIO.IN)
 
-def loop():
-	while True:
-		print '...led on'
-		GPIO.output(LedPin, GPIO.LOW)  # led on
-		time.sleep(0.5)
-		print 'led off...'
-		GPIO.output(LedPin, GPIO.HIGH) # led off
-		time.sleep(0.5)
+def blink():
+    while True:
+        print '...led on'
+        GPIO.output(LedPin, GPIO.LOW)  # led on
+        time.sleep(0.5)
+        print 'led off...'
+        GPIO.output(LedPin, GPIO.HIGH)  # led off
+        time.sleep(0.5)
+
+def status_bwm():
+    while True:
+        if GPIO.input(bwmPin):
+            GPIO.output(LedPin, GPIO.LOW)
+            print 'Bewegung detektiert'
+        else:
+            GPIO.output(LedPin, GPIO.HIGH)
+        time.sleep(0.5)
+
 
 def destroy():
-	GPIO.output(LedPin, GPIO.HIGH)     # led off
-	GPIO.cleanup()                     # Release resource
+    GPIO.output(LedPin, GPIO.HIGH)  # led off
+    GPIO.cleanup()  # Release resource
 
-if __name__ == '__main__':     # Program start from here
-	setup()
-	try:
-		loop()
-	except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
-		destroy()
+
+if __name__ == '__main__':  # Program start from here
+    setup()
+    try:
+        status_bwm()
+    except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
+        destroy()
