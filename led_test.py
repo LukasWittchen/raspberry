@@ -10,7 +10,7 @@ def setup():
     GPIO.setmode(GPIO.BOARD)  # Numbers GPIOs by physical location
     GPIO.setup(LedPin, GPIO.OUT)
     GPIO.output(LedPin, GPIO.HIGH)
-    GPIO.setup(bwmPin, GPIO.IN)
+    GPIO.setup(bwmPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def blink():
     while True:
