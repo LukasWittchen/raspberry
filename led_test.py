@@ -28,7 +28,7 @@ def status_bwm():
             print 'Bewegung detektiert'
         else:
             GPIO.output(LedPin, GPIO.HIGH)
-        time.sleep(0.5)
+        time.sleep(0.1)
 
 
 def destroy():
